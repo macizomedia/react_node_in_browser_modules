@@ -1,0 +1,13 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "database": "${workspaceFolder:react}/storage.db",
+            "name": "storage",
+            "group": "mmcs"
+        }
+    ],
+    "sqltools.useNodeRuntime": true,
+    "editor.fontFamily": "'Fira Code', 'monospace', monospace, 'Droid Sans Fallback'"
+}
