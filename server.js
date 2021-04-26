@@ -42,8 +42,9 @@ const server = http.createServer((req, res) => {
             });
         })
     }
-    else if (req.url === '/delete') {
+    else if (req.url === '/tasks') {
         //var stream = fs.createReadStream('storage.json', {flags:'r+'});
+        fs.createReadStream('databases.json', 'UTF-8').pipe(res)
     }
     else {
         reqPath = req.url

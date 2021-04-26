@@ -1,7 +1,9 @@
 const SettingsContext = React.createContext() // We use create context for global settings
 
 /* This is a minimal ReactApp setUp using cdn, we explore differents components and Syntax */
-
+var model = [{ "title": "Alert", "id": 87, "priority": "24", "due": "in 8 hours", "isDone": false, "timer": "April 26th 2021, 4:06:25 pm" },
+{ "title": "Alert", "id": 87, "priority": "24", "due": "in 8 hours", "isDone": false, "timer": "April 26th 2021, 4:06:25 pm" },
+{ "title": "Penada", "id": 98, "priority": "24", "due": "in 8 hours", "isDone": false, "timer": "April 26th 2021, 4:06:25 pm" }]
 function LoginButton(props) {
     return (
         <button className="btn btn-outline-info" onClick={props.onClick}>
@@ -43,11 +45,11 @@ const Btn = ({ icon, name, isActive, onClick }) => (
 )
 /* Title component is another example of using ternary */
 const Title = ({ title }) => {
-    return title.length > 4 ? <h1>Hello, {title}</h1> : <ActionLink name="cogs" icon="cog" fn={(a)=> console.log(a)} />
+    return title.length > 4 ? <h1>Hello, {title}</h1> : <ActionLink name="cogs" icon="cog" fn={(a) => console.log(a)} />
 }
 
 /* ActionLink combined with Btn components creates reusable pieces of code */
-function ActionLink({name, icon, fn}) {
+function ActionLink({ name, icon, fn }) {
     function handleClick(e) {
         e.preventDefault()
         fn(self)
@@ -160,7 +162,7 @@ const Task = ({ title, isDone, priority, timer, id, due }) => {
                     <small>{id}</small>
                 </div>
                 <Btn name='bin' icon='trash' onClick={() => console.log(this)} />
-                
+
                 <p className="mb-1">{priority}</p>
                 <small>{due}</small>
             </a>
@@ -259,6 +261,54 @@ const saveTask = (val) => {
         })
 }
 
+const fetchTaskList = (fn) => {
+    //let rawData = JSON.stringify(val, null, 2)
+    const fetchOptions = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+        },
+    }
+    fetch('http://mmcs:3000/tasks', fetchOptions)
+        .then((response) => response.body)
+        .then((rb) => {
+            const reader = rb.getReader()
+
+            return new ReadableStream({
+                start(controller) {
+                    // The following function handles each data chunk
+                    function push() {
+                        // "done" is a Boolean and value a "Uint8Array"
+                        reader.read().then(({ done, value }) => {
+                            // If there is no more data to read
+                            if (done) {
+                                console.log('done', done)
+                                controller.close()
+                                return
+                            }
+                            // Get the data and send it to the browser via the controller
+                            controller.enqueue(value)
+                            // Check chunks by logging to the console
+                            console.log(done, value)
+                            push()
+                        })
+                    }
+
+                    push()
+                },
+            })
+        })
+        .then((stream) => {
+            // Respond with our stream
+            return new Response(stream, {
+                headers: { 'Content-Type': 'text/html' },
+            }).text()
+        })
+        .then((result) => {
+            fn(JSON.parse(result))
+        })
+}
 /* CREATE TASK  */
 class CreateTask extends React.Component {
     constructor(props) {
@@ -329,15 +379,19 @@ class LoginControl extends React.Component {
         this.state = { isLoggedIn: false, storage: [] }
     }
     handleClick() {
-        this.setState({ isLoggedIn: !this.state.isLoggedIn, storage: taskList })
+        this.setState({ isLoggedIn: !this.state.isLoggedIn })
     }
-    componentDidMount() { }
+    componentDidMount() {
+        fetchTaskList((arr)=>this.setState({ storage: arr }))
+        
+        console.log(this.state)
+    }
     componentWillUnmount() { }
     render() {
         const isLoggedIn = this.state.isLoggedIn
+        const storage = this.state.storage
         let button
         let dashboard
-        let storage = this.state.storage
         if (isLoggedIn) {
             button = <LogoutButton onClick={this.handleClick} />
             dashboard = <TaskListing arr={storage} />
@@ -349,7 +403,7 @@ class LoginControl extends React.Component {
             <div>
                 <Navigation button={button} />
                 <Greeting user={globalUser} isLoggedIn={isLoggedIn} />
-                {dashboard}           
+                {dashboard}
             </div>
         )
     }
