@@ -5,7 +5,6 @@ const fs = require('fs')
 const path = require('path')
 const { parse } = require('querystring')
 const { hostname } = require('os')
-const putPost = require('./putPosts')
 let port = process.env.PORT || 3000
 var basePath = './'
 
