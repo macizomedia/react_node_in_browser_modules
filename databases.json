@@ -1,130 +1,18 @@
 [
     {
-        "title": "seed",
-        "id": 87,
-        "priority": "24",
-        "due": "in 8 hours",
-        "isDone": false,
-        "timer": "April 26th 2021, 4:06:25 pm"
-    },
-    {
-        "title": "Alert",
-        "id": 87,
-        "priority": "24",
-        "due": "in 8 hours",
-        "isDone": false,
-        "timer": "April 26th 2021, 4:06:25 pm"
-    },
-    {
-        "title": "Penada",
-        "id": 98,
-        "priority": "24",
-        "due": "in 8 hours",
-        "isDone": false,
-        "timer": "April 26th 2021, 4:06:25 pm"
-    },
-    {
-        "title": "Flagged logged & fixed",
-        "id": 84,
-        "priority": "46",
-        "due": "in 5 hours",
-        "isDone": false,
-        "timer": "April 26th 2021, 6:44:32 pm"
-    },
-    {
-        "title": "New data coming",
-        "id": 15,
-        "priority": 0,
-        "due": "",
-        "isDone": false,
-        "timer": "April 26th 2021, 6:47:04 pm"
-    },
-    {
-        "title": "This is a task on database ",
-        "id": 43,
-        "priority": "34",
-        "due": "in 5 hours",
-        "isDone": false,
-        "timer": "April 26th 2021, 6:55:05 pm"
-    },
-    {
-        "title": "But more extra data?",
-        "id": 34,
-        "priority": "5",
-        "due": "in 5 hours",
-        "isDone": false,
-        "timer": "April 26th 2021, 6:55:36 pm"
-    },
-    {
-        "title": "Proper development evn",
-        "id": 64,
-        "priority": 0,
-        "due": "",
-        "isDone": false,
-        "timer": "April 26th 2021, 7:07:50 pm"
-    },
-    {
-        "title": "Alondra",
-        "id": 91,
-        "priority": "11",
-        "due": "in 5 hours",
-        "isDone": false,
-        "timer": "April 26th 2021, 7:13:46 pm"
-    },
-    {
-        "title": "Second data coming",
-        "id": 77,
-        "priority": 0,
-        "due": "",
-        "isDone": false,
-        "timer": "April 26th 2021, 7:13:56 pm"
-    },
-    {
-        "title": "Youll get all",
-        "id": 25,
-        "priority": "23",
-        "due": "in 5 hours",
-        "isDone": false,
-        "timer": "April 26th 2021, 7:15:47 pm"
-    },
-    {
-        "title": "Model adapted",
-        "id": 14,
-        "priority": "17",
-        "due": "in 5 hours",
-        "isDone": false,
-        "timer": "April 26th 2021, 7:19:22 pm"
-    },
-    {
-        "title": "Marihuna",
-        "id": 74,
-        "priority": 0,
-        "due": "",
-        "isDone": false,
-        "timer": "April 26th 2021, 7:25:59 pm"
-    },
-    {
-        "title": "Demencia",
-        "id": 1,
-        "priority": 0,
-        "due": "",
-        "isDone": false,
-        "timer": "April 26th 2021, 7:32:23 pm"
-    },
-    {
-        "title": "Tasklist empty",
-        "id": 48,
-        "priority": 0,
-        "due": "",
-        "isDone": false,
-        "timer": "April 26th 2021, 7:33:14 pm"
-    },
-    {
-        "title": "unamble to set storage from database",
-        "id": 81,
-        "priority": "42",
+        "title": "We have a fresh start!",
+        "id": 44,
+        "priority": "29",
         "due": "in 4 hours",
         "isDone": false,
-        "timer": "April 26th 2021, 7:35:30 pm"
+        "timer": "April 27th 2021, 7:32:32 pm"
+    },
+    {
+        "title": "Delete Method Works on server not on client",
+        "id": 85,
+        "priority": "22",
+        "due": "in 4 hours",
+        "isDone": false,
+        "timer": "April 27th 2021, 7:59:14 pm"
     }
 ]

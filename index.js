@@ -1,5 +1,5 @@
 const SettingsContext = React.createContext() // We use create context for global settings
-
+const root = document.getElementById('root')
 /* This is a minimal ReactApp setUp using cdn, we explore differents components and Syntax */
 var model = [{ "title": "Alert", "id": 87, "priority": "24", "due": "in 8 hours", "isDone": false, "timer": "April 26th 2021, 4:06:25 pm" },
 { "title": "Alert", "id": 87, "priority": "24", "due": "in 8 hours", "isDone": false, "timer": "April 26th 2021, 4:06:25 pm" },
@@ -34,31 +34,31 @@ function ControlButton({ onClick, name, isLoggedIn }) {
     )
 }
 /* Btn is even more reusable as allow us to change the icon, name & active state */
-const Btn = ({ icon, name, isActive, onClick }) => (
+const Btn = ({ id, icon, name, isActive, onClick }) => (
     <i
         type="button"
         onClick={onClick}
         className={`fa fa-${icon} btn btn-outline-${isActive ? 'primary' : 'secondary'
             }`}
-        id={name}
+        id={id}
+        name={name}
     ></i>
 )
 /* Title component is another example of using ternary */
 const Title = ({ title }) => {
-    return title.length > 4 ? <h1>Hello, {title}</h1> : <ActionLink name="cogs" icon="cog" fn={(a) => console.log(a)} />
+    return title.length > 4 ? <h1>Hello, {title}</h1> : <ActionLink id="item" name="cogs" icon="cog" fn={(x) => console.log(window.document.getElementById(x))} />
 }
 
 /* ActionLink combined with Btn components creates reusable pieces of code */
-function ActionLink({ name, icon, fn }) {
+function ActionLink({ id, name, icon, fn }) {
     function handleClick(e) {
         e.preventDefault()
-        fn(self)
+        fn()
     }
     return (
-        <Btn name={name} icon={icon} isActive="false" onClick={handleClick} />
+        <Btn id={id} name={name} icon={icon} isActive="false" onClick={handleClick} />
     )
 }
-
 /* MAIN COMPONENTS AREA */
 /* Navegation is wrapped on LogingControl component*/
 function Navigation({ button }) {
@@ -133,7 +133,7 @@ function Greeting({ user, isLoggedIn }) {
                     content out within the larger container.
                 </p>
                 <p className="lead">
-                    <Btn isActive={isLoggedIn} icon="cogs" name="set" onClick={() => setSettings(user)} />
+                    <Btn isActive={isLoggedIn} icon="user" name="set" onClick={() => setSettings(user)} />
                 </p>
                 {/* <h5 className="display-5">Previous User </h5>
                 <div>New user is {settings}</div>
@@ -149,38 +149,43 @@ function Greeting({ user, isLoggedIn }) {
     return <GuestGreeting user={prevUser} className="p-2" />
 }
 /* TASK COMPONENTS */
-const Task = ({ title, isDone, priority, timer, id, due }) => {
+const Task = ({ title, isDone, priority, timer, id, due, onClick }) => {
     //const handleClick = () = this.
     return (
-        <div className="container-flex m-3 p-2 bg-dark">
-            <a
-                href="#"
-                className="list-group-item list-group-item-action flex-column align-items-start active"
-            >
-                <div className="d-flex w-100 justify-content-between">
-                    <p className={isDone ? 'mb-1' : 'text-muted'}>{title}</p>
-                    <small>{id}</small>
-                </div>
-                <Btn name='bin' icon='trash' onClick={() => console.log(this)} />
+        <div div={id} className="card m-3 p-3 bg-dark">
 
-                <p className="mb-1">{priority}</p>
+            <h4 className={`card-header text-${priority < 50 ? 'warning' : 'info'} text-${isDone ? 'primary' : 'secondary'
+                }`}>{title}</h4>
+            <div className="card-body w-100 p-2 m-3">
+                <small className=""> created at {timer}</small>
+                <p className="mb-1">{id}</p>
                 <small>{due}</small>
-            </a>
+            </div>
+            <Btn className="card-footer w-25" name='bin' icon='trash' onClick={onClick} />
+
         </div>
     )
 }
-const TaskListing = (props) =>
-    props.arr.map(
+const TaskListing = ({ tasks }) =>
+    tasks.map(
         (item, i) => (
-            console.log(item),
             (
                 <Task
                     title={item.title}
                     key={i}
+                    id={item.id}
                     isDone={item.isDone}
                     priority={item.priority}
                     timer={item.timer}
                     due={item.due}
+                    onClick={() => fetch('http://mmcs:3000/tasks', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Accept: 'application/json',
+                        },
+                        body: item.id
+                    }).then(res => console.log(res))}
                 />
             )
         )
@@ -321,6 +326,7 @@ class CreateTask extends React.Component {
             due: '',
             isDone: false,
             timer: moment().format('MMMM Do YYYY, h:mm:ss a'),
+            onClick: (e) => console.log(e)
         }
     }
     handleClick(e) {
@@ -382,8 +388,8 @@ class LoginControl extends React.Component {
         this.setState({ isLoggedIn: !this.state.isLoggedIn })
     }
     componentDidMount() {
-        fetchTaskList((arr)=>this.setState({ storage: arr }))
-        
+        fetchTaskList((arr) => this.setState({ storage: arr }))
+
         console.log(this.state)
     }
     componentWillUnmount() { }
@@ -394,7 +400,7 @@ class LoginControl extends React.Component {
         let dashboard
         if (isLoggedIn) {
             button = <LogoutButton onClick={this.handleClick} />
-            dashboard = <TaskListing arr={storage} />
+            dashboard = <TaskListing tasks={storage} />
         } else {
             button = <LoginButton onClick={this.handleClick} />
             dashboard = <CreateTask />
@@ -418,7 +424,7 @@ function App() {
         </SettingsContext.Provider>
     )
 }
-ReactDOM.render(<App />, document.getElementById('root'))
+ReactDOM.render(<App />, root)
 
 /*
 function allStorage() {
