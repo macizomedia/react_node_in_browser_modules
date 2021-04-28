@@ -1,52 +1,65 @@
-const SettingsContext = React.createContext() // We use create context for global settings
-const root = document.getElementById('root')
-/* This is a minimal ReactApp setUp using cdn, we explore differents components and Syntax */
+const settings = {
+    theme: {
+
+        light: {
+            foreground: "#000000",
+            background: "#eeeeee"
+        },
+        dark: {
+            foreground: "#ffffff",
+            background: "#222222"
+        }
+    },
+    name: 'admin'
+};
 var model = [{ "title": "Alert", "id": 87, "priority": "24", "due": "in 8 hours", "isDone": false, "timer": "April 26th 2021, 4:06:25 pm" },
 { "title": "Alert", "id": 87, "priority": "24", "due": "in 8 hours", "isDone": false, "timer": "April 26th 2021, 4:06:25 pm" },
 { "title": "Penada", "id": 98, "priority": "24", "due": "in 8 hours", "isDone": false, "timer": "April 26th 2021, 4:06:25 pm" }]
-function LoginButton(props) {
-    return (
-        <button className="btn btn-outline-info" onClick={props.onClick}>
-            <i className="fa fa-sign-in-alt" aria-hidden="true"></i>
-        </button>
-    )
-}
-/* Both buttons are similar in form we can make a more generic Button*/
-function LogoutButton(props) {
-    return (
-        <button className="btn btn-outline-warning" onClick={props.onClick}>
-            <i className="fa fa-sign-out-alt" aria-hidden="true" />
-        </button>
-    )
-}
-/* This button is more reusable & has better readability because destructuring */
-function ControlButton({ onClick, name, isLoggedIn }) {
-    return (
-        <button
-            className={
-                // inside class we can create ternary to conditionaly render styles
-                isLoggedIn ? 'btn btn-primary' : 'btn btn-secondary'
-            }
-            onClick={onClick}
-        >
-            {name}
-        </button>
-    )
-}
+const SettingsContext = React.createContext(settings) // We use create context for global settings
+const root = document.getElementById('root')
+/* This is a minimal ReactApp setUp using cdn, we explore differents components and Syntax */
+
 /* Btn is even more reusable as allow us to change the icon, name & active state */
 const Btn = ({ id, icon, name, isActive, onClick }) => (
-    <i
-        type="button"
-        onClick={onClick}
-        className={`fa fa-${icon} btn btn-outline-${isActive ? 'primary' : 'secondary'
-            }`}
-        id={id}
-        name={name}
-    ></i>
+    <button className={`btn btn-outline-${isActive ? 'primary' : 'secondary'}`}>
+
+        <i
+            type="button"
+            onClick={onClick}
+            className={`fa fa-${icon} 
+                }`}
+            id={id}
+            name={name}
+        ></i>
+    </button>
 )
 /* Title component is another example of using ternary */
-const Title = ({ title }) => {
-    return title.length > 4 ? <h1>Hello, {title}</h1> : <ActionLink id="item" name="cogs" icon="cog" fn={(x) => console.log(window.document.getElementById(x))} />
+const Title = ({ title, state }) => {
+
+    return (
+        <div className="mt-2">
+            <h1>Hello, {title} </h1>
+            <p>Current {state}</p>
+        </div>
+    )
+}
+
+const Form = () => {
+    const handleChange = (e) => {
+        e.persist()
+
+        setUser(prev => {
+            return {
+                ...prev,
+                [e.target.name]: e.target.value
+            }
+        })
+    }
+    return (
+        <div>
+            <p></p>
+        </div>
+    )
 }
 
 /* ActionLink combined with Btn components creates reusable pieces of code */
@@ -87,7 +100,7 @@ function GuestGreeting(props) {
     const [input, setInput] = React.useState(props.user)
     return (
         <div className="container-flex m-3 p-2 bg-dark">
-            <Title className="display-5" title={input} />
+            <Title className="display-5" title={input} state={props.state} />
             <div className="row justify-content-center">
                 <label htmlFor="user"></label>
                 <input
@@ -119,13 +132,12 @@ function GuestGreeting(props) {
 function Greeting({ user, isLoggedIn }) {
     const prevUser = JSON.parse(window.localStorage.getItem('user'))
     /* Greeting is a nested component we want to set the user on our app context */
-    const { settings, setSettings } = React.useContext(SettingsContext)
     if (isLoggedIn) {
         return (
             <div className="jumbotron">
                 <h1 className="display-5">{`Hello, ${user}`}</h1>
                 <p className="lead">
-                    {settings}
+                    {settings.name}
                 </p>
                 <hr className="my-4" />
                 <p>
@@ -133,7 +145,7 @@ function Greeting({ user, isLoggedIn }) {
                     content out within the larger container.
                 </p>
                 <p className="lead">
-                    <Btn isActive={isLoggedIn} icon="user" name="set" onClick={() => setSettings(user)} />
+                    <Btn isActive={isLoggedIn} icon="user" name="set" onClick={null} />
                 </p>
                 {/* <h5 className="display-5">Previous User </h5>
                 <div>New user is {settings}</div>
@@ -146,28 +158,39 @@ function Greeting({ user, isLoggedIn }) {
             </div>
         )
     }
-    return <GuestGreeting user={prevUser} className="p-2" />
+    return <GuestGreeting user={prevUser} state={settings.name} className="p-2" />
 }
 /* TASK COMPONENTS */
-const Task = ({ title, isDone, priority, timer, id, due, onClick }) => {
+const Task = ({ title, isDone, priority, timer, id, due, onClick, onEdit }) => {
     //const handleClick = () = this.
     return (
-        <div div={id} className="card m-3 p-3 bg-dark">
+        <div id={id} className="list-group">
+            <a href="#" className="list-group-item list-group-item-action flex-column align-items-start">
 
-            <h4 className={`card-header text-${priority < 50 ? 'warning' : 'info'} text-${isDone ? 'primary' : 'secondary'
-                }`}>{title}</h4>
-            <div className="card-body w-100 p-2 m-3">
-                <small className=""> created at {timer}</small>
-                <p className="mb-1">{id}</p>
-                <small>{due}</small>
-            </div>
-            <Btn className="card-footer w-25" name='bin' icon='trash' onClick={onClick} />
+                <div className="card text-white bg-secondary mt-3">
+                    <div className="card-header col-10 ">
+                        <h4 className={` text-${priority < 50 ? 'warning' : 'info'} text-${isDone ? 'primary' : 'secondary'
+                            }`}>{title}</h4>
+                    </div>
+                    <div className="card-body w-100 p-2 m-3">
+                        <small className=""> created at {timer}</small>
+                        <p className="mb-1">{id}</p>
+                        <small>{due}</small>
+                    </div>
+                    <div className="card-footer bg-warning row">
+                        <Btn className="col-2 text-info" name='edit' icon='edit' onClick={onEdit} />
+                        <Btn className="col-2 card-footer w-25" name='bin' icon='trash' onClick={onClick} />
+                    </div>
 
+                </div>
+            </a>
         </div>
     )
 }
-const TaskListing = ({ tasks }) =>
-    tasks.map(
+const TaskListing = ({ tasks }) => {
+
+
+    return tasks.map(
         (item, i) => (
             (
                 <Task
@@ -178,18 +201,30 @@ const TaskListing = ({ tasks }) =>
                     priority={item.priority}
                     timer={item.timer}
                     due={item.due}
-                    onClick={() => fetch('http://mmcs:3000/tasks', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Accept: 'application/json',
-                        },
-                        body: item.id
-                    }).then(res => console.log(res))}
+                    onClick={() => {
+                        const elem = window.document.getElementById(item.id)
+                        elem.innerHTML = '<div class="m-3"><h1 class="display-3 text-center">Deleting...</h1></div>'
+                        setTimeout(() => {
+                            elem.hidden = true
+                        }, 1640)
+                        fetch('http://mmcs:3000/delete', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                Accept: 'application/json',
+                            },
+                            body: item.id
+                        }).then(res => console.log(res))
+                    }}
+                    onEdit={(e) => {
+                        const elem = e.target.parentElement
+                        elem.innerHTML = "edited"
+                    }}
                 />
             )
         )
     )
+}
 
 const InputElem = ({ label, type, id, help, onChange, value }) => {
     return (
@@ -384,13 +419,18 @@ class LoginControl extends React.Component {
         this.handleClick = this.handleClick.bind(this)
         this.state = { isLoggedIn: false, storage: [] }
     }
+    fetchData() {
+        fetchTaskList((arr) => this.setState({ storage: arr }))
+    }
     handleClick() {
+        this.fetchData()
         this.setState({ isLoggedIn: !this.state.isLoggedIn })
     }
     componentDidMount() {
-        fetchTaskList((arr) => this.setState({ storage: arr }))
+        console.log(this.state.storage)
+    }
+    componentDidUpdate() {
 
-        console.log(this.state)
     }
     componentWillUnmount() { }
     render() {
@@ -399,10 +439,10 @@ class LoginControl extends React.Component {
         let button
         let dashboard
         if (isLoggedIn) {
-            button = <LogoutButton onClick={this.handleClick} />
+            button = <Btn name="logout" icon="sign-out-alt" onClick={this.handleClick} />
             dashboard = <TaskListing tasks={storage} />
         } else {
-            button = <LoginButton onClick={this.handleClick} />
+            button = <Btn icon="sign-in-alt" onClick={this.handleClick} />
             dashboard = <CreateTask />
         }
         return (
@@ -416,10 +456,9 @@ class LoginControl extends React.Component {
 }
 /* App Component provides the context State */
 function App() {
-    const [settings, setSettings] = React.useState([])
 
     return (
-        <SettingsContext.Provider value={{ settings, setSettings }}>
+        <SettingsContext.Provider value={settings}>
             <LoginControl />
         </SettingsContext.Provider>
     )

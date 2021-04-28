@@ -42,29 +42,26 @@ const server = http.createServer((req, res) => {
             });
         })
     }
-    else if (req.method === 'POST' && req.url === '/tasks') {
+    else if (req.method === 'POST' && req.url === '/delete') {
         //var stream = fs.createReadStream('storage.json', {flags:'r+'});
 
-
-        let body = ''
-        req.on('data', (chunk) => {
-            body += chunk.toString()
-        })
-        req.on('end', () => {
-            res.end('ok')
-            req.pipe(res);
-            fs.readFile('databases.json', 'utf8', (err, data) => {
-
+        fs.readFile('databases.json', 'utf8', (err, data) => {
+            const databases = JSON.parse(data);
+            let updatedData = null
+            let body = ''
+            req.on('data', (chunk) => {
+                body += chunk.toString()
+            })
+            req.on('end', () => {
+                //req.pipe(res);
                 if (err) {
                     console.log(`Error reading file from disk: ${err}`);
                 } else {
 
                     // parse JSON string to JSON object
-                    const databases = JSON.parse(data);
-                    console.log('deleting...')
                     // Filter record
-                    let updatedData = databases.filter(item => item.id !== Number(body));
-                    
+                    updatedData = databases.filter(item => item.id !== Number(body));
+
                     // write new data back to the file
                     fs.writeFile('databases.json', JSON.stringify(updatedData, null, 4), (err) => {
                         if (err) {
@@ -75,6 +72,7 @@ const server = http.createServer((req, res) => {
                 }
 
             });
+            res.end(updatedData)
         })
     }
     else if (req.method === 'GET' && req.url === '/tasks') {
