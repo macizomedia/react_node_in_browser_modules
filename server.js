@@ -9,7 +9,7 @@ let port = process.env.PORT || 3000
 var basePath = './'
 
 const server = http.createServer((req, res) => {
-    console.log(`Url is ${req.url} and Method is ${req.method}`)
+    //console.log(`Url is ${req.url} and Method is ${req.method}`)
     if (req.method === 'POST' && req.url === '/echo') {
         let body = ''
         req.on('data', (chunk) => {
@@ -26,7 +26,6 @@ const server = http.createServer((req, res) => {
 
                     // parse JSON string to JSON object
                     const databases = JSON.parse(data);
-                    console.log(databases)
 
                     // add a new record
                     databases.push(JSON.parse(body));

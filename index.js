@@ -1,3 +1,5 @@
+console.log(datetimepickerFactory)
+jQuery.datetimepicker.setLocale('en');
 const settings = {
     theme: {
 
@@ -10,29 +12,41 @@ const settings = {
             background: "#222222"
         }
     },
-    name: 'admin'
+    name: 'admin',
+    tasks: [{ "title": "Alert", "id": 87, "priority": "24", "due": "in 8 hours", "isDone": false, "timer": "April 26th 2021, 4:06:25 pm" },
+    { "title": "Alert", "id": 87, "priority": "24", "due": "in 8 hours", "isDone": false, "timer": "April 26th 2021, 4:06:25 pm" },
+    { "title": "Penada", "id": 98, "priority": "24", "due": "in 8 hours", "isDone": false, "timer": "April 26th 2021, 4:06:25 pm" }]
 };
-var model = [{ "title": "Alert", "id": 87, "priority": "24", "due": "in 8 hours", "isDone": false, "timer": "April 26th 2021, 4:06:25 pm" },
-{ "title": "Alert", "id": 87, "priority": "24", "due": "in 8 hours", "isDone": false, "timer": "April 26th 2021, 4:06:25 pm" },
-{ "title": "Penada", "id": 98, "priority": "24", "due": "in 8 hours", "isDone": false, "timer": "April 26th 2021, 4:06:25 pm" }]
-const SettingsContext = React.createContext(settings) // We use create context for global settings
+const SettingsContext = React.createContext(settings)
 const root = document.getElementById('root')
-/* This is a minimal ReactApp setUp using cdn, we explore differents components and Syntax */
 
-/* Btn is even more reusable as allow us to change the icon, name & active state */
-const Btn = ({ id, icon, name, isActive, onClick }) => (
-    <button className={`btn btn-outline-${isActive ? 'primary' : 'secondary'}`}>
+const DatePick = () => {
+    jQuery('#datetimepicker').datepicker({
+                format: 'Y-m-d H:i',
+                inline: true
+            });
+    // const [startDate, setStartDate] = React.useState(new Date().toISOString());
+    return (
+        <input id="datetimepicker" className="xdsoft_datetimepicker" type="text"/>
+    );
+};
 
+const Btn = ({ id, type, icon, name, isActive, onClick }) => (
+    <button
+        className={`btn btn-outline-${isActive ? 'primary' : 'secondary'}`}
+        onClick={onClick}
+        type={type}
+        name={name}
+        id={id}>
         <i
-            type="button"
-            onClick={onClick}
             className={`fa fa-${icon} 
                 }`}
-            id={id}
-            name={name}
         ></i>
     </button>
 )
+Btn.defaultProps = {
+    type: "button"
+}
 /* Title component is another example of using ternary */
 const Title = ({ title, state }) => {
 
@@ -78,7 +92,7 @@ function Navigation({ button }) {
     return (
         <div>
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-                <a className="navbar-brand" href="#">
+                <a className="navbar-brand" href="/">
                     Task Manager
                 </a>
                 {button}
@@ -96,11 +110,11 @@ const setUser = (val) => {
     window.document.getElementById('user').value = ''
 }
 
-function GuestGreeting(props) {
-    const [input, setInput] = React.useState(props.user)
+function GuestGreeting({ user, state }) {
+    const [input, setInput] = React.useState(user)
     return (
         <div className="container-flex m-3 p-2 bg-dark">
-            <Title className="display-5" title={input} state={props.state} />
+            <Title className="display-5" title={input} state={state} />
             <div className="row justify-content-center">
                 <label htmlFor="user"></label>
                 <input
@@ -162,33 +176,56 @@ function Greeting({ user, isLoggedIn }) {
 }
 /* TASK COMPONENTS */
 const Task = ({ title, isDone, priority, timer, id, due, onClick, onEdit }) => {
-    //const handleClick = () = this.
-    return (
-        <div id={id} className="list-group">
-            <a href="#" className="list-group-item list-group-item-action flex-column align-items-start">
+    if (!isDone) {
+        return (
+            <div id={id} className="list-group">
+                <a href={`${id}`} className="list-group-item list-group-item-action flex-column align-items-start">
 
-                <div className="card text-white bg-secondary mt-3">
-                    <div className="card-header col-10 ">
-                        <h4 className={` text-${priority < 50 ? 'warning' : 'info'} text-${isDone ? 'primary' : 'secondary'
-                            }`}>{title}</h4>
-                    </div>
-                    <div className="card-body w-100 p-2 m-3">
-                        <small className=""> created at {timer}</small>
-                        <p className="mb-1">{id}</p>
-                        <small>{due}</small>
-                    </div>
-                    <div className="card-footer bg-warning row">
-                        <Btn className="col-2 text-info" name='edit' icon='edit' onClick={onEdit} />
-                        <Btn className="col-2 card-footer w-25" name='bin' icon='trash' onClick={onClick} />
-                    </div>
+                    <div className="card text-white bg-secondary mt-3">
+                        <div className="card-header col-10 ">
+                            <h4 id={`${id}-text`} className={` text-${priority < 50 ? 'warning' : 'info'} text-${isDone ? 'primary' : 'secondary'
+                                }`}>{title}</h4>
+                        </div>
+                        <div className="card-body w-100 p-2 m-3">
+                            <small className=""> created at {timer}</small>
+                            <p className="mb-1">{id}</p>
+                            <small>{due}</small>
+                        </div>
+                        <div className="card-footer bg-warning d-flex">
+                            <Btn className="col-2 text-info" name='edit' icon='edit' onClick={onEdit} />
+                            <Btn className="col-2 card-footer w-25" name='bin' icon='trash' onClick={onClick} />
+                        </div>
 
+                    </div>
+                </a>
+            </div>
+        )
+    } else {
+        return (
+
+            <div className="modal">
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title">Modal title</h5>
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Open">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <p>Modal body text goes here.</p>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-primary">Save changes</button>
+                            <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
                 </div>
-            </a>
-        </div>
-    )
+            </div>
+        )
+    }
 }
 const TaskListing = ({ tasks }) => {
-
 
     return tasks.map(
         (item, i) => (
@@ -201,7 +238,8 @@ const TaskListing = ({ tasks }) => {
                     priority={item.priority}
                     timer={item.timer}
                     due={item.due}
-                    onClick={() => {
+                    onClick={(event) => {
+                        event.preventDefault()
                         const elem = window.document.getElementById(item.id)
                         elem.innerHTML = '<div class="m-3"><h1 class="display-3 text-center">Deleting...</h1></div>'
                         setTimeout(() => {
@@ -216,9 +254,11 @@ const TaskListing = ({ tasks }) => {
                             body: item.id
                         }).then(res => console.log(res))
                     }}
-                    onEdit={(e) => {
-                        const elem = e.target.parentElement
-                        elem.innerHTML = "edited"
+                    onEdit={(event) => {
+                        event.preventDefault()
+                        const elem = window.document.getElementById(`${item.id}-text`)
+                        elem.innerHTML = "DONE!!"
+                        item.isDone = true
                     }}
                 />
             )
@@ -393,6 +433,7 @@ class CreateTask extends React.Component {
                         })
                     }
                 />
+                <DatePick />
                 <InputElem
                     label="Priority"
                     type="range"
@@ -406,7 +447,7 @@ class CreateTask extends React.Component {
                         })
                     }
                 />
-                <input type="submit" value="Submit" />
+                <input className="btn btn-outline-primary btn-lg btn-block" type="submit" value="Submit" />
             </form>
         )
     }
@@ -454,7 +495,7 @@ class LoginControl extends React.Component {
         )
     }
 }
-/* App Component provides the context State */
+
 function App() {
 
     return (
@@ -464,16 +505,3 @@ function App() {
     )
 }
 ReactDOM.render(<App />, root)
-
-/*
-function allStorage() {
-    var values = [],
-    keys = Object.keys(localStorage),
-        i = keys.length
-    while (i--) {
-        values.push(localStorage.getItem(keys[i]))
-    }
-
-    return values
-}
-this.state.storage = allStorage() */
