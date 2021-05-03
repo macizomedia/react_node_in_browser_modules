@@ -1,45 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html id="page">
 
 <head>
+    <title>Getting Started with Cirrus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <meta name="Description" content="Enter your description here" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.6.0/darkly/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.css" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge;" />
+    <link href="https://unpkg.com/cirrus-ui" type="text/css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,300,400,600,700" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
+        integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"
+         crossorigin="anonymous"></script>
     <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
     <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-    <script crossorigin defer type="text/babel" src="index.js"></script>
-    <title>React Playground</title>
 </head>
 
 <body>
     <div id="root"></div>
-    <!-- <script crossorigin defer type="text/jsx" src="index.js"></script> -->
-    <script src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.min.js"> </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.js"
-        integrity="sha512-9yoLVdmrMyzsX6TyGOawljEm8rPoM5oNmdUiQvhJuJPTk1qoycCK7HdRWZ10vRRlDlUVhCA/ytqCy78+UujHng=="
-        crossorigin="anonymous"></script>
-    <!-- Load React. -->
-    <script type="text/babel"></script>
-    <script defer type="text/javascript">
-        jQuery(document).ready(function () {
-            jQuery('#datetimepicker').datepicker({
-                format: 'Y-m-d H:i',
-                inline: true
-            });
-        });
-    </script>
+    <script crossorigin type="text/babel" src="index.js"></script>
 </body>
 
 </html>

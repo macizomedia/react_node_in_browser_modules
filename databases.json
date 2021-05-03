@@ -1,53 +1,5 @@
 [
     {
-        "title": "Buy Gelato!!",
-        "id": 23,
-        "priority": "51",
-        "due": "in an hour",
-        "isDone": false,
-        "timer": "April 28th 2021, 11:10:03 pm"
-    },
-    {
-        "title": "Aloha",
-        "id": 42,
-        "priority": "76",
-        "due": "in a day",
-        "isDone": false,
-        "timer": "April 29th 2021, 12:22:13 am"
-    },
-    {
-        "title": "A state of the world",
-        "id": 81,
-        "priority": "66",
-        "due": "in a day",
-        "isDone": false,
-        "timer": "April 29th 2021, 12:47:28 am"
-    },
-    {
-        "title": "Latest fix",
-        "id": 38,
-        "priority": "65",
-        "due": "in 11 hours",
-        "isDone": false,
-        "timer": "May 1st 2021, 1:09:44 pm"
-    },
-    {
-        "title": "Another Task",
-        "id": 13,
-        "priority": 0,
-        "due": "",
-        "isDone": false,
-        "timer": "May 1st 2021, 3:11:18 pm"
-    },
-    {
-        "title": "Register new task",
-        "id": 45,
-        "priority": "80",
-        "due": "in 8 hours",
-        "isDone": false,
-        "timer": "May 1st 2021, 4:23:09 pm"
-    },
-    {
         "title": "Register without log",
         "id": 28,
         "priority": "23",
@@ -56,11 +8,35 @@
         "timer": "May 1st 2021, 4:23:09 pm"
     },
     {
-        "title": "Depende",
-        "id": 9,
-        "priority": "37",
-        "due": "in 7 hours",
+        "title": "Ocho horas",
+        "id": 39,
+        "priority": "29",
+        "due": "Today at 3:02 PM",
         "isDone": false,
-        "timer": "May 1st 2021, 4:25:16 pm"
+        "timer": "May 3rd 2021, 3:02:48 pm"
+    },
+    {
+        "title": "Six",
+        "id": 23,
+        "priority": "36",
+        "due": "Today at 3:07 PM",
+        "isDone": false,
+        "timer": "May 3rd 2021, 3:07:10 pm"
+    },
+    {
+        "title": "Seis horas",
+        "id": 77,
+        "priority": "35",
+        "due": "Today at 9:09 PM",
+        "isDone": false,
+        "timer": "May 3rd 2021, 3:09:12 pm"
+    },
+    {
+        "priority": "51",
+        "isDone": false,
+        "timer": "May 3rd 2021, 9:29:36 pm",
+        "due": "Tomorrow at 5:29 AM",
+        "title": "seis Horas",
+        "id": 84
     }
 ]
