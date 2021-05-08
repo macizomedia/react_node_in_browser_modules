@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html id="page">
+  <head>
+    <title>Getting Started with Cirrus</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
+    />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge;" />
+    <link href="https://unpkg.com/cirrus-ui" type="text/css" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,300,400,600,700"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:400,700"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
+      integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://code.jquery.com/jquery-2.2.4.min.js"
+      integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body>
+    <div class="header header-fixed unselectable header-animated">
+      <div class="header-brand">
+        <div class="nav-item no-hover">
+          <h6 class="title">Nodo</h6>
+        </div>
+        <div class="nav-item nav-btn" id="header-btn">
+          <span></span> <span></span> <span></span>
+        </div>
+      </div>
+      <div class="header-nav" id="header-menu">
+        <div class="nav-left">
+          <div class="nav-item text-center">
+            <a href="#">
+              <span class="icon"><i class="fab fa-affiliatetheme"></i> </span>
+            </a>
+          </div>
+        </div>
+        <div class="nav-right">
+          <div class="nav-item has-sub toggle-hover" id="dropdown">
+            <a class="nav-dropdown-link">Menu</a>
+            <ul class="dropdown-menu dropdown-animated" role="menu">
+              <li role="menu-item"><a href="#">First Item</a></li>
+              <li role="menu-item"><a href="#">Second Item</a></li>
+              <li role="menu-item"><a href="#">Third Item</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <section class="section">
+      <div class="grid grid-gap-3 u-text-center">
+        <div
+          id="arepa"
+          class="grid-c-12"
+          style="
+            background: linear-gradient(to right, #171718, #e4e4e4);
+            color: #fff;
+            border-radius: 0.25rem;
+          "
+        >
+          <p><b>Header</b></p>
+        </div>
+        <div
+          class="grid-c-4 grid-r-6"
+          style="
+            background: linear-gradient(to right, #5a4e64, #675390);
+            color: #fff;
+            border-radius: 0.25rem;
+          "
+        >
+          <p><b>Sidebar</b></p>
+          <div class="card" style="max-width: 250px">
+            <div class="card__container">
+              <div class="card__image"></div>
+              <div class="card__title-container">
+                <p class="title">Title</p>
+                <span class="subtitle">Subtitle</span>
+              </div>
+            </div>
+            <div class="content">
+              <p>
+                Text and other content belong here, inside a
+                <code>content</code> div.
+              </p>
+            </div>
+            <div class="card__action-bar u-center">
+              <button class="btn-link outline">Buttons</button>
+              <button class="btn-link outline">Go here</button>
+            </div>
+            <div class="card__footer">
+              <div class="u-text-center">
+                <span
+                  >This is additional footer text in
+                  <code>card__footer</code>.</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="grid-c-8 grid-r-3"
+          style="
+            background: linear-gradient(to right, #5c5561, #eae9ec);
+            color: #fff;
+            border-radius: 0.25rem;
+          "
+        >
+          <p><b>Main Content</b></p>
+
+          <div class="content">
+            <div class="text-center">
+              <h1>👋 Get Creative!</h1>
+              <h6 class="font-alt font-light">
+                A webpage powered by <b>Cirrus.</b>
+              </h6>
+              <img
+                class="img-stretch"
+                src="https://images.unsplash.com/photo-1429516387459-9891b7b96c78?ixlib=rb-0.3.5&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;s=574fe169c8e82622c91ccfafab46c444&amp;auto=format&amp;fit=crop&amp;w=1050&amp;q=80"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          class="grid-c-4 grid-r-3"
+          style="
+            background: linear-gradient(to right, #8e2de2, #4a00e0);
+            color: #fff;
+            border-radius: 0.25rem;
+          "
+        >
+          <p><b>Sub Content</b></p>
+        </div>
+        <div
+          class="grid-c-4 grid-r-3"
+          style="
+            background: linear-gradient(to right, #8e2de2, #4a00e0);
+            color: #fff;
+            border-radius: 0.25rem;
+          "
+        >
+          <p><b>Sub Content</b></p>
+        </div>
+        <div
+          class="grid-c-12"
+          style="
+            background: linear-gradient(to right, #8e2de2, #4a00e0);
+            color: #fff;
+            border-radius: 0.25rem;
+          "
+        >
+          <p><b>Footer</b></p>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
