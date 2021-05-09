@@ -1,49 +1,127 @@
+/* eslint-disable jsx-a11y/aria-role */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable no-console */
 const { useState, useEffect, useContext, createContext, useReducer } = React;
-const settings = {
-  theme: {
-    light: {
-      foreground: "#000000",
-      background: "#eeeeee",
+
+async function loginUser(credentials) {
+  return fetch("http://mmcs:3000/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
     },
-    dark: {
-      foreground: "#ffffff",
-      background: "#222222",
-    },
-  },
-  name: "admin",
-  tasks: [
-    {
-      title: "Alert",
-      id: 87,
-      priority: "24",
-      due: "in 8 hours",
-      isDone: false,
-      timer: "April 26th 2021, 4:06:25 pm",
-    },
-    {
-      title: "Alert",
-      id: 87,
-      priority: "24",
-      due: "in 8 hours",
-      isDone: false,
-      timer: "April 26th 2021, 4:06:25 pm",
-    },
-    {
-      title: "Penada",
-      id: 98,
-      priority: "24",
-      due: "in 8 hours",
-      isDone: false,
-      timer: "April 26th 2021, 4:06:25 pm",
-    },
-  ],
-};
-const SettingsContext = createContext(settings);
+    body: JSON.stringify(credentials),
+  })
+    .then((data) => data.body)
+    .then((rb) => {
+      const reader = rb.getReader();
+
+      return new ReadableStream({
+        start(controller) {
+          // The following function handles each data chunk
+          function push() {
+            // "done" is a Boolean and value a "Uint8Array"
+            reader.read().then(({ done, value }) => {
+              // If there is no more data to read
+              if (done) {
+                console.log("done", done);
+                controller.close();
+                return;
+              }
+              // Get the data and send it to the browser via the controller
+              controller.enqueue(value);
+              // Check chunks by logging to the console
+              console.log(done, value);
+              push();
+            });
+          }
+
+          push();
+        },
+      });
+    })
+    .then((stream) => {
+      // Respond with our stream
+      return new Response(stream, {
+        headers: { "Content-Type": "text/html" },
+      }).text();
+    })
+    .then((result) => result);
+}
+
+const SettingsContext = createContext();
 const root = document.getElementById("root");
+
+const Login = () => {
+  const [username, setUserName] = useState();
+  const [password, setPassword] = useState();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const token = await loginUser({
+      username,
+      password,
+    });
+    console.log(JSON.parse(token));
+    setToken(JSON.parse(token));
+  };
+  return (
+    <form name="login-form" onSubmit={handleSubmit}>
+      <div className="frame__body">
+        <h3>Login</h3>
+        <div className="form-section">
+          <label>Email</label>
+          <div className="input-control">
+            <input
+              className="input-contains-icon"
+              id="email"
+              name="email"
+              placeholder="Email"
+              type="text"
+              onChange={(e) => setUserName(e.target.value)}
+            ></input>
+            <span className="icon">
+              <i className="far fa-wrapper fa-envelope-open small"></i>
+            </span>
+          </div>
+        </div>
+        <div className="form-section">
+          <label>Password</label>
+          <div className="input-control">
+            <input
+              className="input-contains-icon"
+              id="password"
+              name="password"
+              placeholder="Password"
+              type="password"
+              onChange={(e) => setPassword(e.target.value)}
+            ></input>
+            <span className="icon">
+              <i className="fas fa-wrapper fa-key small"></i>
+            </span>
+          </div>
+        </div>
+        <div className="space"></div>
+        <button
+          className="btn-info u-pull-right"
+          name="btn"
+          value="login"
+          type="submit"
+        >
+          Log In
+        </button>
+        <span className="fg-danger info"></span>
+        <a href="#" className="u u-LR">
+          Forgot password?
+        </a>
+      </div>
+    </form>
+  );
+};
 const Dashboard = () => {
+  const [data, setData] = useContext(SettingsContext);
+  console.log(data);
   return (
     <div className="card">
       <div className="card__container">
@@ -64,7 +142,7 @@ const Dashboard = () => {
           </div>
 
           <div className="tile__container">
-            <p className="tile__title">Joanne Doe</p>
+            <p className="tile__title">{data.name}</p>
             <p className="tile__subtitle">
               <a href="/">@jdoe</a>
             </p>
@@ -218,32 +296,6 @@ function ActionLink({ id, name, icon, fn }) {
 }
 /* MAIN COMPONENTS AREA */
 /* Navegation is wrapped on LogingControl component*/
-function Navigation({ button }) {
-  return (
-    <div className="header header-fixed unselectable header-animated">
-      <div className="header-brand">
-        <div className="nav-item no-hover">
-          <h6 className="title">Task Manager</h6>
-        </div>
-        <div className="nav-item nav-btn" id="header-btn">
-          {button}
-        </div>
-      </div>
-      <div className="header-nav" id="header-menu">
-        <div className="nav-left">
-          <div className="nav-item text-center">
-            <a href="/">
-              <span className="icon">
-                <i className="fab fa-wrapper fa-twitter" aria-hidden="true"></i>{" "}
-              </span>{" "}
-            </a>{" "}
-          </div>
-        </div>
-        <div className="nav-right">{button}</div>
-      </div>
-    </div>
-  );
-}
 /* GREETINGS COMPONENT */
 /* To understand state, we create a global user variable */
 var globalUser = "";
@@ -255,30 +307,9 @@ const setUser = (val) => {
 };
 
 function GuestGreeting({ user, state }) {
-  const [input, setInput] = useState(user);
   return (
     <div className="card m-3 p-3">
       <Dashboard />
-      <div className="u-flex u-flex-column">
-        <label htmlFor="user"></label>
-        <input
-          onChange={(e) => setInput(e.target.value)}
-          value={input.name}
-          type="text"
-          className="px-2 py-1 m-1 u-round"
-          name="name"
-          id="user"
-          aria-describedby="helpId"
-          placeholder="Type your name"
-        />
-        <button
-          onClick={() => setUser(input)} // We safe the user to the LocalStorage!
-          type="button"
-          className="px-2 py-1 m-1 u-round btn-secondary"
-        >
-          Set
-        </button>
-      </div>
       <small id="helpId" className="form-text text-muted">
         v.1 @macizomedia
       </small>
@@ -294,7 +325,7 @@ function Greeting({ user, isLoggedIn }) {
     return (
       <div className="card m-3 p-4">
         <h1 className="title">{`Hello, ${user}`}</h1>
-        <p className="subtitle">{settings.name}</p>
+        <p className="subtitle">{prevUser}</p>
         <hr className="my-4" />
         <p>
           It uses utility classes for typography and spacing to space content
@@ -306,54 +337,59 @@ function Greeting({ user, isLoggedIn }) {
       </div>
     );
   }
-  return (
-    <GuestGreeting user={prevUser} state={settings.name} className="p-2" />
-  );
+  return <GuestGreeting state={prevUser} className="p-2" />;
 }
 /* TASK COMPONENTS */
 const Task = ({ title, isDone, priority, timer, id, due, onClick, onEdit }) => {
   return (
-    <div id={id} className="list-group">
-      <a
-        href={`${id}`}
-        className="list-group-item list-group-item-action flex-column align-items-start"
-      >
-        <div className="card text-white bg-secondary mt-3">
-          <div className="card-header col-10 ">
-            <h4
-              id={`${id}-text`}
-              className={` text-${priority < 50 ? "warning" : "info"} text-${
-                isDone ? "primary" : "secondary"
-              }`}
-            >
-              {title}
-            </h4>
-          </div>
-          <div className="card-body w-100 p-2 m-3">
-            <small className=""> created at {timer}</small>
-            <p className="mb-1">{id}</p>
-            <small>{due}</small>
-          </div>
-          <div className="card-footer bg-warning d-flex">
-            <Btn
-              className="col-2 text-info"
-              name="edit"
-              icon="edit"
-              onClick={onEdit}
-            />
-            <Btn
-              className="col-2 card-footer w-25"
-              name="bin"
-              icon="trash"
-              onClick={onClick}
-            />
-          </div>
-        </div>
-      </a>
+    <div id={id} className="card">
+      <div className="card__header">
+        <p
+          id={`${id}-text`}
+          className={` font-bold px-3 ${
+            priority < 50 ? "warning" : "info"
+          } text-${isDone ? "primary" : "secondary"}`}
+        >
+          {title}
+        </p>
+      </div>
+      <div className="card__footer level content">
+        <small className=""> created at {timer}</small>
+        <p className="mb-1">{id}</p>
+        <small>{due}</small>
+      </div>
+      <div className="card__action-bar u-center">
+        <Btn
+          className="btn-transparent outline"
+          name="edit"
+          icon="edit"
+          onClick={onEdit}
+        />
+        <Btn
+          className="btn-transparent outline"
+          name="bin"
+          icon="trash"
+          onClick={onClick}
+        />
+        <Btn
+          className="btn-transparent outline"
+          name="bin"
+          icon="cogs"
+          onClick={onClick}
+        />
+      </div>
     </div>
   );
 };
 const TaskListing = ({ tasks }) => {
+  useEffect(() => {
+    anime({
+      targets: ".card",
+      translateY: [500, 0], // from 100 to 250
+      delay: anime.stagger(50),
+      easing: "easeOutSine(1, 80, 10, 0)",
+    });
+  }, []);
   return tasks.map((item, i) => (
     <Task
       title={item.title}
@@ -578,12 +614,13 @@ const CreateTask = () => {
 /* AUTH CONTROL */
 /* Login Component is wrap inside App */
 const LoginControl = () => {
-  const [storage, setStorage] = useState([]);
+  const [storage, setStorage] = useContext(SettingsContext);
   const [state, setState] = useState({ isLoggedIn: false });
   /* const [action, dispatch] = useReducer(appReducer, []) */
   useEffect(() => {
-    fetchTaskList((arr) => setStorage(arr));
-  }, [setStorage]);
+    fetchTaskList((arr) => setStorage({ ...storage, tasks: arr }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   let button;
   let dashboard;
   if (state.isLoggedIn) {
@@ -594,7 +631,7 @@ const LoginControl = () => {
         onClick={() => setState({ isLoggedIn: false })}
       />
     );
-    dashboard = <TaskListing tasks={storage} />;
+    dashboard = <TaskListing tasks={storage.tasks} />;
   } else {
     button = (
       <Btn icon="sign-in-alt" onClick={() => setState({ isLoggedIn: true })} />
@@ -603,18 +640,107 @@ const LoginControl = () => {
   }
   return (
     <div className="pt-5">
-      <Navigation button={button} />
-      <Greeting user={globalUser} isLoggedIn={state.isLoggedIn} />
+      <Greeting user={storage.name} isLoggedIn={state.isLoggedIn} />
       {dashboard}
     </div>
   );
 };
 
-function App() {
+function Home(props) {
+  const [state, setState] = useState({
+    theme: {
+      light: {
+        foreground: "#000000",
+        background: "#eeeeee",
+      },
+      dark: {
+        foreground: "#ffffff",
+        background: "#222222",
+      },
+    },
+    name: "admin",
+    tasks: [
+      {
+        title: "Alert",
+        id: 87,
+        priority: "24",
+        due: "in 8 hours",
+        isDone: false,
+        timer: "April 26th 2021, 4:06:25 pm",
+      },
+      {
+        title: "Alert",
+        id: 87,
+        priority: "24",
+        due: "in 8 hours",
+        isDone: false,
+        timer: "April 26th 2021, 4:06:25 pm",
+      },
+      {
+        title: "Penada",
+        id: 98,
+        priority: "24",
+        due: "in 8 hours",
+        isDone: false,
+        timer: "April 26th 2021, 4:06:25 pm",
+      },
+    ],
+  });
   return (
-    <SettingsContext.Provider value={settings}>
+    <SettingsContext.Provider value={[state, setState]}>
       <LoginControl />
+      {props.children}
     </SettingsContext.Provider>
   );
 }
-ReactDOM.render(<App />, root);
+const Link = ReactRouterDOM.Link;
+const Route = ReactRouterDOM.Route;
+
+function setToken(userToken) {
+  sessionStorage.setItem("token", JSON.stringify(userToken));
+}
+function getToken() {
+  const tokenString = sessionStorage.getItem("token");
+  const userToken = JSON.parse(tokenString);
+  return userToken;
+}
+const App = () => {
+  const token = getToken();
+
+  return (
+    <ReactRouterDOM.HashRouter>
+      <div className="header header-fixed u-unselectable header-animated">
+        <div className="header-brand">
+          <div className="nav-item no-hover">
+            <a>
+              <h6 className="title">TaskApp</h6>
+            </a>
+          </div>
+          <div className="nav-item nav-btn" id="header-btn">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+
+        <div className="nav-right">
+          <div className="nav-item active">
+            <Link to="/">Home</Link>
+          </div>
+          <div className="nav-item">
+            <Link to="/login">Login</Link>
+          </div>
+        </div>
+      </div>
+      <div className="hero">
+        <div className="hero-body">
+          <div className="content">
+            <Route path="/" component={token ? Home : Login} />
+            <Route path="/login" component={Login} />
+          </div>
+        </div>
+      </div>
+    </ReactRouterDOM.HashRouter>
+  );
+};
+ReactDOM.render(<App />, document.querySelector("#root"));
